@@ -7,7 +7,7 @@ const slides = [
     subTitle: "HELLO",
     title: "DESIGNING IMMERSIVE DIGITAL EXPERIENCES",
     description: "Passionate about crafting high-performance web and cross-platform mobile applications, focusing on intuitive user interfaces, seamless navigation, and modern design aesthetics.",
-    image: "/assets/hero2.png",
+    image: "/assets/hero1.png",
   },
   {
     subTitle: "HELLO",
