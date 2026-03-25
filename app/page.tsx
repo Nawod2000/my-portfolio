@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import About from "../components/About";
@@ -10,10 +10,18 @@ import Contact from "@/components/Contact";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("Home");
+  const [mounted, setMounted] = useState(false);
+
+  // මේකෙන් වෙන්නේ page එක සම්පූර්ණයෙන්ම load වුණාම විතරක් පෙන්වන එක
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div className="bg-black min-h-screen" />;
 
   return (
     // h-screen වෙනුවට min-h-screen දාන්න, overflow-hidden අයින් කරන්න
-    <main className="min-h-screen w-full bg-[#000000] p-4 md:p-5 flex flex-col items-center pt-2">
+    <main className="min-h-screen w-full bg-[#000000] p-4 md:p-5 flex flex-col items-center pt-2 ">
       <div className="w-full max-w-7xl flex flex-col min-h-screen">
         
         {/* Navbar Section */}

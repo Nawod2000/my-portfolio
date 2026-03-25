@@ -1,21 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import heroone from '../public/assets/hero1.png';
-import herotwo from '../public/assets/hero2.png';
 
 const slides = [
   {
     subTitle: "HELLO",
     title: "DESIGNING IMMERSIVE DIGITAL EXPERIENCES",
     description: "Passionate about crafting high-performance web and cross-platform mobile applications, focusing on intuitive user interfaces, seamless navigation, and modern design aesthetics.",
-    image: herotwo.src,
+    image: "/assets/hero2.png",
   },
   {
     subTitle: "HELLO",
     title: "ARCHITECTING ROBUST BACKEND EXPERIENCES",
     description: "Deeply committed to building high-performance server-side applications using Microservices architecture, focusing on scalable system design and complex problem-solving.",
-    image: heroone.src,
+    image: "/assets/hero2.png",
   }
 ];
 
@@ -30,7 +28,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center justify-center pt-5 md:p-5 overflow-hidden h-[85vh] w-full bg-[#080808]">
+    <div className="relative flex flex-col items-center justify-center pt-5 md:p-5 overflow-hidden min-h-[500px] md:h-[85vh] w-full bg-[#080808]">
       
       <AnimatePresence mode="wait">
         <motion.div
