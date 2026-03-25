@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  /* මුළු body එකේම අකුරු highlight (select) වීම වැළැක්වීමට මෙතැනට දැමිය හැක */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  /* අකුරු click කරද්දී එන නිල්/සුදු පාට highlight එක සහ ඉර සම්පූර්ණයෙන්ම අයින් කිරීමට */
+  h1, h2, h3, span, p {
+    -webkit-tap-highlight-color: transparent;
+    outline: none !important;
+    user-select: none;
+  }
+}
+
+/* Custom Selection Color - මෙය අවශ්‍ය නම් පමණක් තබා ගන්න */
+/* අකුරු select කරන්න ඉඩ දෙනවා නම් පමණක් මෙය වැඩ කරයි */
+::selection {
+  background-color: rgba(207, 84, 30, 0.3);
+  color: #ffffff;
+}
+
+/* ඕනෑම element එකක් focus වූ විට එන outline එක සහ ඉර සම්පූර්ණයෙන්ම අයින් කරයි */
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* අනෙක් සියලුම CSS (Scrollbar, Animations) පහළින් තබා ගන්න... */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Card එක ඇතුළේ scroll එකට සිහින් scrollbar එකක් (Mobile වලට සුදුසුයි) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(207, 84, 30, 0.2);
+  border-radius: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
