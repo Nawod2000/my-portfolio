@@ -46,8 +46,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
-                    onClick={() => toggleMenu()}
-                    onTouchStart={() => toggleMenu()}
+                    onClick={toggleMenu}
                     className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform"
                     style={{ touchAction: "manipulation" }}
                 >
