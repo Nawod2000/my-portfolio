@@ -24,7 +24,7 @@ export default function Home() {
       <div className="w-full max-w-7xl flex flex-col min-h-screen">
         
         {/* Navbar Section */}
-        <div className="relative z-[100] flex-shrink-0 w-full">
+        <div className="relative z-[110] isolate flex-shrink-0 w-full">
           <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 

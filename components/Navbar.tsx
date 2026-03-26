@@ -43,14 +43,19 @@ const Navbar = ({ activeTab, setActiveTab }: {
 
                 {/* Hamburger */}
                 <button
-                    className="p-4 -m-4 bg-transparent border-none outline-none cursor-pointer relative z-[110]"
+                    className="p-4 -m-4 bg-transparent border-none outline-none cursor-pointer relative z-[120] touch-manipulation"
+                    // onClick වෙනුවට සහ onClick සමඟ මේ දෙකම දාන්න
+                    onPointerDown={(e) => {
+                        e.stopPropagation();
+                        console.log("Touched!");
+                        setMenuOpen(true);
+                    }}
                     onClick={(e) => {
                         e.stopPropagation();
-                        console.log("Menu clicked"); // මෙහෙම console එකක් දාලා බලන්න ලැප් එකේ inspect වලදී වැඩද කියලා
                         setMenuOpen(true);
                     }}
                 >
-                    <div className="space-y-1.5 pointer-events-none"> {/* අයිකනය ඇතුළේ pointer events disable කරන්න */}
+                    <div className="space-y-1.5 pointer-events-none flex flex-col items-center">
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
@@ -105,11 +110,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
                                 ))}
                             </div>
                         </motion.div>
-                        {/* Backdrop එක ක්ලික් කළ විට menu එක වැසීමට */}
-                        <div
-                            className="absolute inset-0 -z-10"
-                            onClick={() => setMenuOpen(false)}
-                        />
+                        
                     </div>
                 )}
             </AnimatePresence>
