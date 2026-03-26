@@ -28,7 +28,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative z-10 pointer-events-auto touch-pan-y flex flex-col items-center justify-center pt-5 md:p-5  min-h-[500px] md:h-[85vh] w-full bg-[#080808]">
+    <div className="relative z-0 flex flex-col items-center justify-center pt-5 md:p-5 min-h-[500px] md:h-[85vh] w-full bg-[#080808]">
       
       <AnimatePresence mode="wait">
         <motion.div

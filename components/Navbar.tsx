@@ -11,9 +11,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
     const [menuOpen, setMenuOpen] = useState(false);
 
     // Menu එක විවෘත කිරීමේ function එක
-    const toggleMenu = (e: React.MouseEvent | React.TouchEvent) => {
-        e.stopPropagation();
-        e.preventDefault(); // Browser එකේ අනවශ්‍ය scroll වැළැක්වීමට
+    const toggleMenu = () => {
         console.log("Menu Toggle Triggered!");
         setMenuOpen(true);
     };
@@ -48,11 +46,9 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[150]">
                 <button
-                    // ෆෝන් එකේ ක්ලික් එක අහුවෙන්න touchStart පාවිච්චි කරමු
-                    onTouchStart={toggleMenu}
-                    onClick={toggleMenu}
-                    className="p-5 -m-5 bg-transparent border-none outline-none cursor-pointer relative z-[160] active:scale-95 transition-transform"
-                    style={{ touchAction: "manipulation" }}
+                    onClick={() => toggleMenu()}
+                    className="p-8 -m-8 bg-transparent border-none outline-none cursor-pointer relative z-[200] active:opacity-50"
+                    style={{ touchAction: "auto" }}
                 >
                     <div className="space-y-1.5 pointer-events-none">
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
@@ -65,7 +61,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Slide Menu Overlay */}
             <AnimatePresence>
                 {menuOpen && (
-                    <div className="fixed inset-0 z-[1000] overflow-hidden">
+                    <div className="fixed inset-0 z-[1000]">
                         {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}
