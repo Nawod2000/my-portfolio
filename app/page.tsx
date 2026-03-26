@@ -31,7 +31,7 @@ export default function Home() {
         {/* Main Content Card 
             flex-grow සහ overflow-hidden වෙනුවට ඇතුළත content එකට ඉඩ දෙන්න
         */}
-        <div className="w-full flex-grow bg-[#080808] border border-white/10 rounded-[30px] md:rounded-[40px] shadow-2xl relative flex items-start justify-center -mt-[1px] z-20 min-h-[500px] mb-10">
+        <div className="w-full flex-grow bg-[#080808] border rounded-[30px] md:rounded-[40px] shadow-2xl relative flex items-start justify-center -mt-[1px] z-20 min-h-[80vh] mb-10 overflow-visible  border-white/10   ">
           <div className="w-full h-full p-4 md:p-0">
             {activeTab === "Home" && <Hero />}
             {activeTab === "About" && <About />}

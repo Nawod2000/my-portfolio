@@ -28,12 +28,12 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative z-10 flex flex-col items-center justify-center pt-5 md:p-5 overflow-hidden min-h-[500px] md:h-[85vh] w-full bg-[#080808]">
+    <div className="relative z-10 flex flex-col items-center justify-center pt-5 md:p-5  min-h-[500px] md:h-[85vh] w-full bg-[#080808]">
       
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 1, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -58,7 +58,7 @@ const Hero = () => {
               <motion.img
                 src={slides[currentSlide].image}
                 alt={slides[currentSlide].title}
-                initial={{ scale: 1.1, opacity: 0 }}
+                initial={{ scale: 1.1, opacity: 1 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 className="w-full h-full object-cover"
@@ -70,7 +70,7 @@ const Hero = () => {
           <div className="w-full md:w-1/2 text-center md:text-left px-2">
             
             <motion.span 
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 1, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               className="text-[#A47148] text-[10px] md:text-sm font-bold uppercase mb-3 block tracking-widest"
             >
