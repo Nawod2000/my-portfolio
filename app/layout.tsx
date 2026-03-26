@@ -13,7 +13,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      {/* min-h-screen එකක් body එකට එකතු කරන්න */}
       <body className="antialiased bg-black selection:bg-[#CF541E]/30 min-h-screen">
         {children}
       </body>

@@ -46,9 +46,13 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[150]">
                 <button
-                    onClick={() => toggleMenu()}
-                    className="p-8 -m-8 bg-transparent border-none outline-none cursor-pointer relative z-[200] active:opacity-50"
-                    style={{ touchAction: "auto" }}
+                    onPointerDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleMenu();
+                    }}
+                    className="p-10 -m-10 bg-transparent border-none outline-none cursor-pointer relative z-[999] active:opacity-50"
+                    style={{ touchAction: "none" }} 
                 >
                     <div className="space-y-1.5 pointer-events-none">
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
