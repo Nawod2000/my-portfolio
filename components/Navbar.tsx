@@ -43,17 +43,17 @@ const Navbar = ({ activeTab, setActiveTab }: {
 
                 {/* Hamburger */}
                 <button
+                    className="p-4 -m-4 bg-transparent border-none outline-none cursor-pointer relative z-[110]"
                     onClick={(e) => {
-                        e.stopPropagation(); // අනිත් event වලට බාධා නොකිරීමට
+                        e.stopPropagation();
+                        console.log("Menu clicked"); // මෙහෙම console එකක් දාලා බලන්න ලැප් එකේ inspect වලදී වැඩද කියලා
                         setMenuOpen(true);
                     }}
-                    className="p-3 -m-3 outline-none" // පෙනුම වෙනස් නොවී ක්ලික් කළ හැකි ඉඩ වැඩි කරයි
-                    aria-label="Toggle Menu"
                 >
-                    <div className="space-y-1.5">
-                        <span className="block w-6 h-[2px] bg-white"></span>
-                        <span className="block w-6 h-[2px] bg-white"></span>
-                        <span className="block w-6 h-[2px] bg-white"></span>
+                    <div className="space-y-1.5 pointer-events-none"> {/* අයිකනය ඇතුළේ pointer events disable කරන්න */}
+                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
+                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
+                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                     </div>
                 </button>
             </div>
@@ -61,11 +61,11 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Slide Menu */}
             <AnimatePresence>
                 {menuOpen && (
-                    <div className="fixed inset-0 z-[999] flex justify-start">
+                    <div className="fixed inset-0 z-[9999] flex justify-start">
 
                         {/* Backdrop */}
                         <motion.div
-                            initial={{ opacity: 0 }}
+                            initial={{ opacity: 1 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setMenuOpen(false)}
