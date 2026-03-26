@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion ,AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const navItems = ["Home", "About", "Resume", "Skills", "Projects", "Contact"];
@@ -52,6 +52,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
       </div>
 
       {/* Slide Menu */}
+      <AnimatePresence>
       {menuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50">
           
@@ -87,8 +88,14 @@ const Navbar = ({ activeTab, setActiveTab }: {
               ))}
             </div>
           </motion.div>
+          {/* Backdrop එක ක්ලික් කළ විට menu එක වැසීමට */}
+      <div 
+        className="absolute inset-0 -z-10" 
+        onClick={() => setMenuOpen(false)} 
+      />
         </div>
       )}
+      </AnimatePresence>
     </>
   );
 };
