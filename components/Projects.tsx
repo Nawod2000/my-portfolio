@@ -1,38 +1,34 @@
 import React from 'react';
 import Image from 'next/image';
 import { ExternalLink, } from 'lucide-react';
-import cross from '../public/assets/muvecross.png';
-import emp from '../public/assets/empststem.png';
-import cloty from '../public/assets/cloty.png';
-import polio from '../public/assets/portpolio.png';
 
 const Projects = () => {
   const projects = [
     {
       title: "MUVE MOBILITY APP",
       category: "Cross-Platform Mobile (Flutter)",
-      image: cross, 
+      image: "/assets/muvecross.png", 
       github: "#",
       demo: "#",
     },
     {
       title: "EMPLOYEE MANAGEMENT SYSTEM",
       category: "Full-Stack (Java & Spring Boot & Angular)",
-      image: emp,
+      image: "/assets/empststem.png",
       github: "#",
       demo: "#",
     },
     {
       title: "CLOTHIFY STORE SYSTEM",
       category: "Desktop (JavaFX & Hibernate)",
-      image: cloty,
+      image: "/assets/cloty.png",
       github: "#",
       demo: "#",
     },
     {
       title: "PERSONAL PORTFOLIO",
       category: "Web (Next.js & Tailwind CSS)",
-      image: polio,
+      image: "/assets/portpolio.png",
       github: "#",
       demo: "#",
     }

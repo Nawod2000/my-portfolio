@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { Code2, Server, Smartphone } from 'lucide-react';
-import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'; 
-import backendImg from '../public/assets/abotimage.png';
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 
 const About = () => {
     const services = [
@@ -27,7 +26,7 @@ const About = () => {
                     {/* Image */}
                     <div className="w-40 h-40 md:w-64 md:h-64 rounded-2xl md:rounded-3xl bg-gradient-to-br from-[#CF541E]/20 to-transparent border border-white/10 flex items-center justify-center relative group overflow-hidden shadow-xl md:shadow-2xl">
                         <Image 
-                            src={backendImg} 
+                            src="/assets/abotimage.png"
                             alt="Profile"
                             fill
                             className="object-cover transition-all duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-105"

@@ -5,14 +5,18 @@
   --foreground: #ededed;
 }
 
+/* Base body styles */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+
+  /* keep only here */
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Tailwind base layer */
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -25,31 +29,31 @@ body {
   }
 
   h1, h2, h3, span, p {
-    -webkit-tap-highlight-color: transparent;
-    outline: none !important;
+    outline: none;
     user-select: auto;
   }
 }
 
+/* Text selection */
 ::selection {
   background-color: rgba(207, 84, 30, 0.3);
   color: #ffffff;
 }
 
+/* ⚠️ FIXED: remove aggressive focus reset */
 *:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    -webkit-tap-highlight-color: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Smooth fixed elements (for navbar) */
+.fixed {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-.fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
+/* Scrollbar hidden */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -58,12 +62,18 @@ body {
   scrollbar-width: none;
 }
 
+/* Custom scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(207, 84, 30, 0.2);
   border-radius: 10px;
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
 }
 
 @keyframes fadeIn {

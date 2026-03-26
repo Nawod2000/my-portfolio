@@ -44,17 +44,15 @@ const Navbar = ({ activeTab, setActiveTab }: {
             </nav>
 
             {/* Mobile Navbar */}
-            <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[150]">
+            <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
-                    onPointerDown={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleMenu();
-                    }}
-                    className="p-10 -m-10 bg-transparent border-none outline-none cursor-pointer relative z-[999] active:opacity-50"
-                    style={{ touchAction: "none" }} 
+                    onClick={() => toggleMenu()}
+                    onTouchStart={() => toggleMenu()}
+                    className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform"
+                    style={{ touchAction: "manipulation" }}
                 >
-                    <div className="space-y-1.5 pointer-events-none">
+                    {/* Icons */}
+                    <div className="space-y-1.5">
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
@@ -65,7 +63,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Slide Menu Overlay */}
             <AnimatePresence>
                 {menuOpen && (
-                    <div className="fixed inset-0 z-[1000]">
+                    <div className="fixed inset-0 z-[99999]">
                         {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}

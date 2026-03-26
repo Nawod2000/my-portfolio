@@ -21,8 +21,8 @@ export default function Home() {
       <div className="w-full max-w-7xl flex flex-col min-h-screen">
 
         {/* Navbar Section */}
-        <div className="fixed top-4 left-0 right-0 z-[999] w-full px-4 md:px-0 pointer-events-none">
-          <div className="max-w-7xl mx-auto pointer-events-auto">
+        <div className="fixed top-4 left-0 right-0 z-[999] w-full px-4 md:px-0 ">
+          <div className="max-w-7xl mx-auto ">
             <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
         </div>
