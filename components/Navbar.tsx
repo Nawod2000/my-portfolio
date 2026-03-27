@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 const navItems = ["Home", "About", "Resume", "Skills", "Projects", "Contact"];
 
@@ -9,25 +9,6 @@ const Navbar = ({ activeTab, setActiveTab }: {
     setActiveTab: (val: string) => void
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const hamburgerRef = useRef<HTMLButtonElement>(null);
-
-    useEffect(() => {
-        const button = hamburgerRef.current;
-        if (!button) return;
-
-        // Use a NATIVE event listener with { passive: false }.
-        // React's synthetic onTouchStart is attached at the root element,
-        // so the browser may ignore e.preventDefault() there (treating it as passive).
-        // A direct native listener on the element itself with passive:false is the
-        // ONLY reliable way to block the ghost "click" event on real phones.
-        const handleTouch = (e: TouchEvent) => {
-            e.preventDefault(); // blocks ghost click — guaranteed to work here
-            setMenuOpen(prev => !prev);
-        };
-
-        button.addEventListener("touchstart", handleTouch, { passive: false });
-        return () => button.removeEventListener("touchstart", handleTouch);
-    }, []);
 
     return (
         <>
@@ -59,18 +40,27 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
-                    ref={hamburgerRef}
-                    onClick={() => setMenuOpen(prev => !prev)} // mouse fallback for desktop
+                    onClick={() => setMenuOpen(prev => !prev)}
                     aria-label="Toggle navigation menu"
                     type="button"
-                    className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform select-none"
-                    style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                    className="relative z-[99999] bg-transparent border-none outline-none select-none"
+                    style={{
+                        touchAction: "manipulation",
+                        WebkitTapHighlightColor: "transparent",
+                        cursor: "pointer",
+                        padding: "16px",
+                        margin: "-16px",
+                        minWidth: "44px",
+                        minHeight: "44px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
                 >
-                    {/* Hamburger Icon */}
-                    <div className="space-y-1.5 pointer-events-none">
-                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
-                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
-                        <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
+                    <div style={{ pointerEvents: "none", display: "flex", flexDirection: "column", gap: "5px" }}>
+                        <span style={{ display: "block", width: "24px", height: "2.5px", background: "white", borderRadius: "9999px" }}></span>
+                        <span style={{ display: "block", width: "24px", height: "2.5px", background: "white", borderRadius: "9999px" }}></span>
+                        <span style={{ display: "block", width: "24px", height: "2.5px", background: "white", borderRadius: "9999px" }}></span>
                     </div>
                 </button>
             </div>
@@ -78,15 +68,18 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Slide Menu Overlay */}
             <AnimatePresence>
                 {menuOpen && (
-                    <div className="fixed inset-0 z-[99999]">
+                    <div
+                        className="fixed inset-0 z-[99999]"
+                        style={{ touchAction: "none" }}
+                    >
                         {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onTouchStart={(e) => { e.preventDefault(); setMenuOpen(false); }}
                             onClick={() => setMenuOpen(false)}
                             className="absolute inset-0 bg-black/70 backdrop-blur-md"
+                            style={{ cursor: "pointer", touchAction: "manipulation" }}
                         />
 
                         {/* Drawer */}
@@ -99,10 +92,21 @@ const Navbar = ({ activeTab, setActiveTab }: {
                         >
                             {/* Close button */}
                             <button
-                                className="text-white text-2xl self-end mb-10 p-4 -m-2 hover:text-[#A47148] transition-colors"
-                                style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation" }}
-                                onTouchStart={(e) => { e.preventDefault(); setMenuOpen(false); }}
                                 onClick={() => setMenuOpen(false)}
+                                className="text-white text-2xl self-end mb-10 hover:text-[#A47148] transition-colors"
+                                style={{
+                                    touchAction: "manipulation",
+                                    WebkitTapHighlightColor: "transparent",
+                                    cursor: "pointer",
+                                    padding: "12px",
+                                    minWidth: "44px",
+                                    minHeight: "44px",
+                                    background: "none",
+                                    border: "none",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
                             >
                                 ✕
                             </button>
@@ -111,15 +115,18 @@ const Navbar = ({ activeTab, setActiveTab }: {
                                 {navItems.map((item) => (
                                     <button
                                         key={item}
-                                        style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation", minHeight: "44px" }}
-                                        onTouchStart={(e) => {
-                                            e.preventDefault();
-                                            setActiveTab(item);
-                                            setMenuOpen(false);
-                                        }}
                                         onClick={() => {
                                             setActiveTab(item);
                                             setMenuOpen(false);
+                                        }}
+                                        style={{
+                                            touchAction: "manipulation",
+                                            WebkitTapHighlightColor: "transparent",
+                                            cursor: "pointer",
+                                            minHeight: "44px",
+                                            background: "none",
+                                            border: "none",
+                                            padding: "4px 0",
                                         }}
                                         className={`text-left text-sm font-bold uppercase tracking-[0.2em] transition-colors
                                         ${activeTab === item ? "text-[#A47148]" : "text-[#5B646E] hover:text-white"}`}
