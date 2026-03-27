@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion"; // only used for desktop tab indicator
 import { useState } from "react";
 
 const navItems = ["Home", "About", "Resume", "Skills", "Projects", "Contact"];
@@ -37,21 +37,22 @@ const Navbar = ({ activeTab, setActiveTab }: {
                 ))}
             </nav>
 
-            {/* Mobile Navbar */}
-            <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
+            {/* Mobile Hamburger Button */}
+            <div className="flex md:hidden items-center px-6 py-4 w-full">
                 <button
                     onClick={() => setMenuOpen(prev => !prev)}
                     aria-label="Toggle navigation menu"
                     type="button"
-                    className="relative z-[99999] bg-transparent border-none outline-none select-none"
                     style={{
-                        touchAction: "manipulation",
+                        // touch-action:none tells iOS not to intercept this tap as a scroll gesture
+                        touchAction: "none",
                         WebkitTapHighlightColor: "transparent",
                         cursor: "pointer",
-                        padding: "16px",
-                        margin: "-16px",
-                        minWidth: "44px",
-                        minHeight: "44px",
+                        background: "none",
+                        border: "none",
+                        outline: "none",
+                        // Generous tap target — no negative margins which can confuse iOS hit testing
+                        padding: "12px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -65,80 +66,106 @@ const Navbar = ({ activeTab, setActiveTab }: {
                 </button>
             </div>
 
-            {/* Slide Menu Overlay */}
-            <AnimatePresence>
-                {menuOpen && (
-                    <div
-                        className="fixed inset-0 z-[99999]"
-                        style={{ touchAction: "none" }}
-                    >
-                        {/* Backdrop */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setMenuOpen(false)}
-                            className="absolute inset-0 bg-black/70 backdrop-blur-md"
-                            style={{ cursor: "pointer", touchAction: "manipulation" }}
-                        />
+            {/*
+              Mobile Drawer — pure CSS transitions, no framer-motion.
+              Framer-motion AnimatePresence + backdrop-filter:blur + position:fixed
+              has known rendering failures on iOS Safari/Chrome (WKWebView).
+              Always in DOM, shown/hidden via opacity + pointer-events + transform.
+            */}
+            <div
+                style={{
+                    position: "fixed",
+                    inset: 0,
+                    zIndex: 99999,
+                    // Visible when open, invisible + non-interactive when closed
+                    opacity: menuOpen ? 1 : 0,
+                    pointerEvents: menuOpen ? "auto" : "none",
+                    transition: "opacity 0.25s ease",
+                }}
+            >
+                {/* Backdrop */}
+                <div
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "rgba(0,0,0,0.7)",
+                        backdropFilter: "blur(12px)",
+                        WebkitBackdropFilter: "blur(12px)",
+                    }}
+                />
 
-                        {/* Drawer */}
-                        <motion.div
-                            initial={{ x: "-100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "-100%" }}
-                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                            className="relative w-72 h-full bg-[#080808] p-8 border-r border-white/10 shadow-2xl flex flex-col"
-                        >
-                            {/* Close button */}
+                {/* Drawer Panel */}
+                <div
+                    style={{
+                        position: "relative",
+                        width: "288px",
+                        height: "100%",
+                        background: "#080808",
+                        borderRight: "1px solid rgba(255,255,255,0.1)",
+                        boxShadow: "0 25px 50px -12px rgba(0,0,0,0.8)",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "32px",
+                        transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
+                        transition: "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
+                    }}
+                >
+                    {/* Close button */}
+                    <button
+                        onClick={() => setMenuOpen(false)}
+                        style={{
+                            alignSelf: "flex-end",
+                            marginBottom: "40px",
+                            padding: "12px",
+                            background: "none",
+                            border: "none",
+                            color: "white",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            touchAction: "manipulation",
+                            WebkitTapHighlightColor: "transparent",
+                            minWidth: "44px",
+                            minHeight: "44px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        ✕
+                    </button>
+
+                    {/* Nav Items */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+                        {navItems.map((item) => (
                             <button
-                                onClick={() => setMenuOpen(false)}
-                                className="text-white text-2xl self-end mb-10 hover:text-[#A47148] transition-colors"
+                                key={item}
+                                onClick={() => {
+                                    setActiveTab(item);
+                                    setMenuOpen(false);
+                                }}
                                 style={{
-                                    touchAction: "manipulation",
-                                    WebkitTapHighlightColor: "transparent",
-                                    cursor: "pointer",
-                                    padding: "12px",
-                                    minWidth: "44px",
-                                    minHeight: "44px",
+                                    textAlign: "left",
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    textTransform: "uppercase",
+                                    letterSpacing: "0.2em",
+                                    color: activeTab === item ? "#A47148" : "#5B646E",
                                     background: "none",
                                     border: "none",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                    minHeight: "44px",
+                                    touchAction: "manipulation",
+                                    WebkitTapHighlightColor: "transparent",
+                                    padding: "8px 0",
                                 }}
                             >
-                                ✕
+                                {item}
                             </button>
-
-                            <div className="flex flex-col gap-8">
-                                {navItems.map((item) => (
-                                    <button
-                                        key={item}
-                                        onClick={() => {
-                                            setActiveTab(item);
-                                            setMenuOpen(false);
-                                        }}
-                                        style={{
-                                            touchAction: "manipulation",
-                                            WebkitTapHighlightColor: "transparent",
-                                            cursor: "pointer",
-                                            minHeight: "44px",
-                                            background: "none",
-                                            border: "none",
-                                            padding: "4px 0",
-                                        }}
-                                        className={`text-left text-sm font-bold uppercase tracking-[0.2em] transition-colors
-                                        ${activeTab === item ? "text-[#A47148]" : "text-[#5B646E] hover:text-white"}`}
-                                    >
-                                        {item}
-                                    </button>
-                                ))}
-                            </div>
-                        </motion.div>
+                        ))}
                     </div>
-                )}
-            </AnimatePresence>
+                </div>
+            </div>
         </>
     );
 };
