@@ -10,10 +10,16 @@ const Navbar = ({ activeTab, setActiveTab }: {
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // Menu එක විවෘත කිරීමේ function එක
-    const toggleMenu = () => {
-        console.log("Menu Toggle Triggered!");
-        setMenuOpen(true);
+    // Toggle mobile menu open/close
+    const toggleMenu = (e?: React.SyntheticEvent) => {
+        if (e) e.stopPropagation();
+        setMenuOpen(prev => !prev);
+    };
+
+    const handleHamburgerTouch = (e: React.TouchEvent) => {
+        e.preventDefault(); // prevent ghost click on real phones
+        e.stopPropagation();
+        setMenuOpen(prev => !prev);
     };
 
     return (
@@ -47,11 +53,14 @@ const Navbar = ({ activeTab, setActiveTab }: {
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
                     onClick={toggleMenu}
-                    className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform"
-                    style={{ touchAction: "manipulation" }}
+                    onTouchEnd={handleHamburgerTouch}
+                    aria-label="Toggle navigation menu"
+                    type="button"
+                    className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform select-none"
+                    style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
-                    {/* Icons */}
-                    <div className="space-y-1.5">
+                    {/* Hamburger Icon */}
+                    <div className="space-y-1.5 pointer-events-none">
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
                         <span className="block w-6 h-[2.5px] bg-white rounded-full"></span>
