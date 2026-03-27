@@ -10,15 +10,18 @@ const Navbar = ({ activeTab, setActiveTab }: {
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // Toggle mobile menu open/close
-    const toggleMenu = (e?: React.SyntheticEvent) => {
-        if (e) e.stopPropagation();
+    // Handles hamburger touch on real mobile phones.
+    // e.preventDefault() stops the browser from generating a ghost "click" event
+    // after the touch ends, which was causing the menu to open and immediately close.
+    const handleHamburgerTouch = (e: React.TouchEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         setMenuOpen(prev => !prev);
     };
 
-    const handleHamburgerTouch = (e: React.TouchEvent) => {
-        e.preventDefault(); // prevent ghost click on real phones
-        e.stopPropagation();
+    // Mouse-only fallback (desktop). On touch devices, onTouchStart fires first
+    // and calls preventDefault(), which prevents this onClick from ever firing.
+    const handleHamburgerClick = () => {
         setMenuOpen(prev => !prev);
     };
 
@@ -52,8 +55,8 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
-                    onClick={toggleMenu}
-                    onTouchEnd={handleHamburgerTouch}
+                    onTouchStart={handleHamburgerTouch}
+                    onClick={handleHamburgerClick}
                     aria-label="Toggle navigation menu"
                     type="button"
                     className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform select-none"
@@ -72,11 +75,12 @@ const Navbar = ({ activeTab, setActiveTab }: {
             <AnimatePresence>
                 {menuOpen && (
                     <div className="fixed inset-0 z-[99999]">
-                        {/* Backdrop */}
+                        {/* Backdrop — closes menu on tap/click outside */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
+                            onTouchStart={(e) => { e.preventDefault(); setMenuOpen(false); }}
                             onClick={() => setMenuOpen(false)}
                             className="absolute inset-0 bg-black/70 backdrop-blur-md"
                         />
@@ -89,8 +93,11 @@ const Navbar = ({ activeTab, setActiveTab }: {
                             transition={{ type: "spring", damping: 30, stiffness: 300 }}
                             className="relative w-72 h-full bg-[#080808] p-8 border-r border-white/10 shadow-2xl flex flex-col"
                         >
+                            {/* Close button */}
                             <button
                                 className="text-white text-2xl self-end mb-10 p-2 hover:text-[#A47148] transition-colors"
+                                style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation" }}
+                                onTouchStart={(e) => { e.preventDefault(); setMenuOpen(false); }}
                                 onClick={() => setMenuOpen(false)}
                             >
                                 ✕
@@ -100,6 +107,12 @@ const Navbar = ({ activeTab, setActiveTab }: {
                                 {navItems.map((item) => (
                                     <button
                                         key={item}
+                                        style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation" }}
+                                        onTouchStart={(e) => {
+                                            e.preventDefault();
+                                            setActiveTab(item);
+                                            setMenuOpen(false);
+                                        }}
                                         onClick={() => {
                                             setActiveTab(item);
                                             setMenuOpen(false);
