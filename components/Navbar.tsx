@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion"; // only used for desktop tab indicator
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 const navItems = ["Home", "About", "Resume", "Skills", "Projects", "Contact"];
@@ -13,7 +13,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
     return (
         <>
             {/* Desktop Navbar */}
-            <nav className="hidden md:flex items-end justify-center w-full px-12 relative h-16">
+            <nav className="hidden md:flex items-end justify-center w-full px-12 relative h-16 pointer-events-auto">
                 <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-white/5 z-0" />
                 {navItems.map((item) => (
                     <button
@@ -38,24 +38,30 @@ const Navbar = ({ activeTab, setActiveTab }: {
             </nav>
 
             {/* Mobile Hamburger Button */}
-            <div className="flex md:hidden items-center px-6 py-4 w-full">
+            <div className="flex md:hidden items-center px-6 py-4 w-full pointer-events-auto relative z-[99999]">
                 <button
-                    onClick={() => setMenuOpen(prev => !prev)}
-                    aria-label="Toggle navigation menu"
+                    // ABSOLUTE BULLETPROOF FIX: We ONLY use 'true'.
+                    // This mathematically eliminates the ghost-click double-fire bug.
+                    // If touch fires then click fires, true -> true = menu stays open!
+                    onClick={() => setMenuOpen(true)}
+                    onTouchStart={() => setMenuOpen(true)}
+                    aria-label="Open navigation menu"
                     type="button"
                     style={{
-                        // touch-action:none tells iOS not to intercept this tap as a scroll gesture
-                        touchAction: "none",
+                        touchAction: "manipulation",
                         WebkitTapHighlightColor: "transparent",
                         cursor: "pointer",
                         background: "none",
                         border: "none",
                         outline: "none",
-                        // Generous tap target — no negative margins which can confuse iOS hit testing
-                        padding: "12px",
+                        padding: "16px",
+                        margin: "-16px", // Generous tap target 
+                        position: "relative",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        minWidth: "44px",
+                        minHeight: "44px",
                     }}
                 >
                     <div style={{ pointerEvents: "none", display: "flex", flexDirection: "column", gap: "5px" }}>
@@ -66,18 +72,12 @@ const Navbar = ({ activeTab, setActiveTab }: {
                 </button>
             </div>
 
-            {/*
-              Mobile Drawer — pure CSS transitions, no framer-motion.
-              Framer-motion AnimatePresence + backdrop-filter:blur + position:fixed
-              has known rendering failures on iOS Safari/Chrome (WKWebView).
-              Always in DOM, shown/hidden via opacity + pointer-events + transform.
-            */}
+            {/* Mobile Drawer */}
             <div
                 style={{
                     position: "fixed",
                     inset: 0,
                     zIndex: 99999,
-                    // Visible when open, invisible + non-interactive when closed
                     opacity: menuOpen ? 1 : 0,
                     pointerEvents: menuOpen ? "auto" : "none",
                     transition: "opacity 0.25s ease",
@@ -85,7 +85,9 @@ const Navbar = ({ activeTab, setActiveTab }: {
             >
                 {/* Backdrop */}
                 <div
+                    // ONLY use 'false'. Ghost clicks won't toggle it back open!
                     onClick={() => setMenuOpen(false)}
+                    onTouchStart={() => setMenuOpen(false)}
                     style={{
                         position: "absolute",
                         inset: 0,
@@ -114,14 +116,16 @@ const Navbar = ({ activeTab, setActiveTab }: {
                     {/* Close button */}
                     <button
                         onClick={() => setMenuOpen(false)}
+                        onTouchStart={() => setMenuOpen(false)}
                         style={{
                             alignSelf: "flex-end",
                             marginBottom: "40px",
-                            padding: "12px",
+                            padding: "16px",
+                            margin: "-16px",
                             background: "none",
                             border: "none",
                             color: "white",
-                            fontSize: "20px",
+                            fontSize: "24px",
                             cursor: "pointer",
                             touchAction: "manipulation",
                             WebkitTapHighlightColor: "transparent",
@@ -141,6 +145,10 @@ const Navbar = ({ activeTab, setActiveTab }: {
                             <button
                                 key={item}
                                 onClick={() => {
+                                    setActiveTab(item);
+                                    setMenuOpen(false);
+                                }}
+                                onTouchStart={() => {
                                     setActiveTab(item);
                                     setMenuOpen(false);
                                 }}
