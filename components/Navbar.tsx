@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const navItems = ["Home", "About", "Resume", "Skills", "Projects", "Contact"];
 
@@ -9,21 +9,25 @@ const Navbar = ({ activeTab, setActiveTab }: {
     setActiveTab: (val: string) => void
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const hamburgerRef = useRef<HTMLButtonElement>(null);
 
-    // Handles hamburger touch on real mobile phones.
-    // e.preventDefault() stops the browser from generating a ghost "click" event
-    // after the touch ends, which was causing the menu to open and immediately close.
-    const handleHamburgerTouch = (e: React.TouchEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setMenuOpen(prev => !prev);
-    };
+    useEffect(() => {
+        const button = hamburgerRef.current;
+        if (!button) return;
 
-    // Mouse-only fallback (desktop). On touch devices, onTouchStart fires first
-    // and calls preventDefault(), which prevents this onClick from ever firing.
-    const handleHamburgerClick = () => {
-        setMenuOpen(prev => !prev);
-    };
+        // Use a NATIVE event listener with { passive: false }.
+        // React's synthetic onTouchStart is attached at the root element,
+        // so the browser may ignore e.preventDefault() there (treating it as passive).
+        // A direct native listener on the element itself with passive:false is the
+        // ONLY reliable way to block the ghost "click" event on real phones.
+        const handleTouch = (e: TouchEvent) => {
+            e.preventDefault(); // blocks ghost click — guaranteed to work here
+            setMenuOpen(prev => !prev);
+        };
+
+        button.addEventListener("touchstart", handleTouch, { passive: false });
+        return () => button.removeEventListener("touchstart", handleTouch);
+    }, []);
 
     return (
         <>
@@ -55,8 +59,8 @@ const Navbar = ({ activeTab, setActiveTab }: {
             {/* Mobile Navbar */}
             <div className="flex md:hidden justify-between items-center px-6 py-4 w-full relative z-[99999]">
                 <button
-                    onTouchStart={handleHamburgerTouch}
-                    onClick={handleHamburgerClick}
+                    ref={hamburgerRef}
+                    onClick={() => setMenuOpen(prev => !prev)} // mouse fallback for desktop
                     aria-label="Toggle navigation menu"
                     type="button"
                     className="relative z-[99999] p-4 -m-4 bg-transparent border-none outline-none cursor-pointer active:scale-95 transition-transform select-none"
@@ -75,7 +79,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
             <AnimatePresence>
                 {menuOpen && (
                     <div className="fixed inset-0 z-[99999]">
-                        {/* Backdrop — closes menu on tap/click outside */}
+                        {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -95,7 +99,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
                         >
                             {/* Close button */}
                             <button
-                                className="text-white text-2xl self-end mb-10 p-2 hover:text-[#A47148] transition-colors"
+                                className="text-white text-2xl self-end mb-10 p-4 -m-2 hover:text-[#A47148] transition-colors"
                                 style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation" }}
                                 onTouchStart={(e) => { e.preventDefault(); setMenuOpen(false); }}
                                 onClick={() => setMenuOpen(false)}
@@ -107,7 +111,7 @@ const Navbar = ({ activeTab, setActiveTab }: {
                                 {navItems.map((item) => (
                                     <button
                                         key={item}
-                                        style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation" }}
+                                        style={{ WebkitTapHighlightColor: "transparent", touchAction: "manipulation", minHeight: "44px" }}
                                         onTouchStart={(e) => {
                                             e.preventDefault();
                                             setActiveTab(item);
